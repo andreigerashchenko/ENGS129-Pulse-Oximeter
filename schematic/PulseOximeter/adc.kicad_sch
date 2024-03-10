@@ -1,0 +1,112 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "fbf499a7-9479-4309-896f-fdbcfc51b20c")
+	(paper "A3")
+	(title_block
+		(title "Pulse Oximeter")
+		(date "2024-03-07")
+		(rev "1")
+		(company "ENGS 129")
+		(comment 1 "Renan Laurore")
+		(comment 2 "Andrei Gerashchenko")
+	)
+	(lib_symbols)
+	(hierarchical_label "D0"
+		(shape output)
+		(at 247.65 162.56 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "414abe8b-c9ac-42c9-bd58-ae2a3ba222c9")
+	)
+	(hierarchical_label "Channel 1"
+		(shape input)
+		(at 224.79 162.56 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "73eb2740-16e2-482b-9625-848b7b552e82")
+	)
+	(hierarchical_label "Channel 2"
+		(shape input)
+		(at 224.79 165.1 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7447f3c0-3ff8-4c9f-a9c8-bf70f438b06c")
+	)
+	(hierarchical_label "CS"
+		(shape output)
+		(at 247.65 160.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9e7d4cae-492d-49ea-bdbf-67298f8e0dcd")
+	)
+	(hierarchical_label "D1"
+		(shape output)
+		(at 247.65 165.1 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "afd1244b-4e96-4cca-8618-8b19211e6be3")
+	)
+	(hierarchical_label "CLK"
+		(shape output)
+		(at 247.65 167.64 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b4c96041-ec76-4fbb-b703-393525c4e16c")
+	)
+	(hierarchical_label "VCC"
+		(shape input)
+		(at 242.57 157.48 270)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "cb62b834-ffd7-4c43-b691-6bd2adede277")
+	)
+	(hierarchical_label "GND"
+		(shape input)
+		(at 242.57 170.18 90)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f2642e23-9e9f-4ad3-a577-f687849f00b2")
+	)
+)

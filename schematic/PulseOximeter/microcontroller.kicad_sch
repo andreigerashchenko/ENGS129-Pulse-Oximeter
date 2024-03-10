@@ -1,0 +1,136 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "6427d710-b005-4192-9011-c2d62c35af43")
+	(paper "A3")
+	(title_block
+		(title "Pulse Oximeter")
+		(date "2024-03-07")
+		(rev "1")
+		(company "ENGS 129")
+		(comment 1 "Renan Laurore")
+		(comment 2 "Andrei Gerashchenko")
+	)
+	(lib_symbols)
+	(hierarchical_label "LED PWM 2"
+		(shape output)
+		(at 177.8 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1e17419f-6965-4629-b832-5b9fbc1cd79b")
+	)
+	(hierarchical_label "3V3"
+		(shape output)
+		(at 170.18 118.11 90)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2802c4ec-da55-435f-866d-dfccf4d99d2f")
+	)
+	(hierarchical_label "Switch Control 1"
+		(shape output)
+		(at 177.8 125.73 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2ea9fca9-ec3b-4a22-93f0-3d2aaab4b361")
+	)
+	(hierarchical_label "CS"
+		(shape output)
+		(at 177.8 132.08 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4a616190-51c0-4231-8c73-055438207940")
+	)
+	(hierarchical_label "D1"
+		(shape input)
+		(at 157.48 128.27 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4d4d7973-4787-4c8b-b014-451ebe63ce6d")
+	)
+	(hierarchical_label "GND"
+		(shape output)
+		(at 170.18 134.62 270)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "68fd1869-4026-4a33-afd1-9a668ea9850a")
+	)
+	(hierarchical_label "CLK"
+		(shape output)
+		(at 177.8 134.62 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6f35eb0d-921d-4434-8c15-b17bb91c9fa2")
+	)
+	(hierarchical_label "D0"
+		(shape input)
+		(at 157.48 125.73 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7ca3261e-d406-41ef-ab69-8679f45f03f7")
+	)
+	(hierarchical_label "LED PWM 1"
+		(shape output)
+		(at 177.8 119.38 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a4a2f4b4-910c-4ee5-9a88-069235ba7e54")
+	)
+	(hierarchical_label "Switch Control 2"
+		(shape output)
+		(at 177.8 128.27 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "df874f90-10fc-4577-adb6-0be54477f814")
+	)
+)

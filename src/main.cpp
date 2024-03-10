@@ -7,10 +7,11 @@
 #define SPI_RATE 1000000
 #define SAMPLE_RATE 60         // Hz
 #define RECORDING_PERIOD 3000  // milliseconds
-#define PEAK_DETECTOR_DECAY 0.15
-#define MIN_PEAK_INTERVAL 700  // milliseconds
+#define PEAK_DETECTOR_DECAY 0.4
+// Max expected heart rate is 200 bpm, so the minimum peak interval = 60 / (200 * 1000) = 300 ms
+#define MIN_PEAK_INTERVAL 300  // milliseconds
 
-#define AVERAGE_WINDOW 10
+#define AVERAGE_WINDOW 15  // Number of samples to average for heart rate and oxygen saturation
 
 #define ADC_MISO_1 8
 #define ADC_MISO_2 12
@@ -26,10 +27,12 @@
 #define MAX_DUTY_CYCLE 49
 #define MIN_DUTY_CYCLE 10
 #define DUTY_CYCLE_STEP 1
-#define AGC_UPPER_LIMIT 3.0       // Upper limit of input signal (Volts)
-#define AGC_LOWER_LIMIT 0.3       // Lower limit of input signal (Volts)
-#define AGC_TOLERANCE 0.075       // Tolerance for AGC (Volts)
+#define AGC_UPPER_LIMIT 2.4       // Upper limit of input signal (Volts)
+#define AGC_LOWER_LIMIT 0.9       // Lower limit of input signal (Volts)
+#define AGC_TOLERANCE 0.05       // Tolerance for AGC (Volts)
 #define AGC_UPDATE_INTERVAL 2500  // milliseconds to wait before updating duty cycle again
+
+#define LED_BLINK_DURATION 100  // milliseconds
 
 // DATA_BUFFER_SIZE is samples per second * number of seconds for one channel
 #define DATA_BUFFER_SIZE ((SAMPLE_RATE * RECORDING_PERIOD) / 1000)
@@ -38,7 +41,7 @@ typedef struct {
     uint32_t timestamp;  // Timestamp in milliseconds
     uint8_t data_MSB;    // Most significant byte of the ADC reading
     uint8_t data_LSB;    // Least significant byte of the ADC reading
-    uint8_t channel;     // 1 for channel 1, 2 for channel 2
+    uint8_t channel;     
     char end = '\n';     // Newline character to delimit data
 } adc_data_t;
 
@@ -53,6 +56,9 @@ volatile uint8_t ir_duty_cycle = 15;
 adc_data_t adc_data_1[DATA_BUFFER_SIZE];
 adc_data_t adc_data_2[DATA_BUFFER_SIZE];
 adc_data_t red_peaks[DATA_BUFFER_SIZE];
+adc_data_t ir_peaks[DATA_BUFFER_SIZE];
+adc_data_t red_troughs[DATA_BUFFER_SIZE];
+adc_data_t ir_troughs[DATA_BUFFER_SIZE];
 uint16_t buffer_index = 0;
 uint32_t last_ADC_sample_time = 0;
 uint32_t last_AGC_update_time = 0;
@@ -89,6 +95,9 @@ uint8_t heart_period_index = 0;
 uint8_t oxygen_values[AVERAGE_WINDOW];
 uint8_t oxygen_index = 0;
 
+uint32_t heartbeat_blink_time = 0;
+bool heartbeat_blink = false;
+
 void ISR(void);
 
 void pwm_pulseox(uint16_t frequency, uint8_t red, uint8_t ir);
@@ -111,6 +120,10 @@ void setup() {
 }
 
 void loop() {
+    if (heartbeat_blink && (millis() - heartbeat_blink_time >= LED_BLINK_DURATION)) {
+        digitalWrite(LED_BUILTIN, LOW);
+        heartbeat_blink = false;
+    }
     if (millis() - last_ADC_sample_time >= 1000 / SAMPLE_RATE) {
         last_ADC_sample_time = millis();
 
@@ -135,7 +148,9 @@ void loop() {
                         // Update heart rate
                         heart_periods[heart_period_index] = heart_period;
                         heart_period_index = (heart_period_index + 1) % AVERAGE_WINDOW;
-                        digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+                        digitalWrite(LED_BUILTIN, HIGH);
+                        heartbeat_blink_time = millis();
+                        heartbeat_blink = true;
                     }
                     just_increased_red = false;
                 } else {
@@ -199,6 +214,21 @@ void loop() {
             red_peaks[buffer_index - 1].data_LSB = red_peak_value & 0xFF;
             red_peaks[buffer_index - 1].channel = 7;
             red_peaks[buffer_index - 1].timestamp = millis();
+
+            ir_peaks[buffer_index - 1].data_MSB = ir_peak_value >> 8;
+            ir_peaks[buffer_index - 1].data_LSB = ir_peak_value & 0xFF;
+            ir_peaks[buffer_index - 1].channel = 9;
+            ir_peaks[buffer_index - 1].timestamp = millis();
+
+            red_troughs[buffer_index - 1].data_MSB = red_trough_value >> 8;
+            red_troughs[buffer_index - 1].data_LSB = red_trough_value & 0xFF;
+            red_troughs[buffer_index - 1].channel = 11;
+            red_troughs[buffer_index - 1].timestamp = millis();
+
+            ir_troughs[buffer_index - 1].data_MSB = ir_trough_value >> 8;
+            ir_troughs[buffer_index - 1].data_LSB = ir_trough_value & 0xFF;
+            ir_troughs[buffer_index - 1].channel = 12;
+            ir_troughs[buffer_index - 1].timestamp = millis();
         } else {
             // Calculate oxygen saturation
             uint16_t red_ac = red_peak_value - red_trough_value;
@@ -242,10 +272,28 @@ void loop() {
             duty_cycle_packet.channel = 3;
 
             // Send data over serial
+
+            // Channels list
+            // 1: Red ADC data
+            // 2: IR ADC data
+            // 3: Red and IR duty cycles
+            // 4: Red peak values
+            // 5: Heartrate and oxygen saturation
+            // 6: Unused
+            // 7: Red peak values
+            // 8: Heart period
+            // 9: IR peak values
+            // 10: Unused
+            // 11: Red trough values
+            // 12: IR trough values
+
             Serial.print("DATA_START\n");
             Serial.write((uint8_t *)adc_data_1, sizeof(adc_data_1));
-            // Serial.write((uint8_t *)adc_data_2, sizeof(adc_data_2));
+            Serial.write((uint8_t *)adc_data_2, sizeof(adc_data_2));
             Serial.write((uint8_t *)red_peaks, sizeof(red_peaks));
+            Serial.write((uint8_t *)ir_peaks, sizeof(ir_peaks));
+            Serial.write((uint8_t *)red_troughs, sizeof(red_troughs));
+            Serial.write((uint8_t *)ir_troughs, sizeof(ir_troughs));
             Serial.write((uint8_t *)&bpm_spo2_packet, sizeof(bpm_spo2_packet));
             Serial.write((uint8_t *)&heart_period_packet, sizeof(heart_period_packet));
             Serial.write((uint8_t *)&duty_cycle_packet, sizeof(duty_cycle_packet));
@@ -254,6 +302,7 @@ void loop() {
         }
     }
 
+    // if (millis() - last_AGC_update_time >= agc_update_interval) {
     if (millis() - last_AGC_update_time >= AGC_UPDATE_INTERVAL) {
         last_AGC_update_time = millis();
         bool can_increase_red = red_peak_value < agc_upper_limit - agc_tolerance && red_trough_value > agc_lower_limit + agc_tolerance;

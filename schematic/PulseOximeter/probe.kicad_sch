@@ -1,0 +1,64 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "dd14d170-1166-4918-aaa4-aff34627f26e")
+	(paper "A3")
+	(title_block
+		(title "Pulse Oximeter")
+		(date "2024-03-07")
+		(rev "1")
+		(company "ENGS 129")
+		(comment 1 "Andrei Gerashchenko")
+		(comment 2 "Renan Laurore")
+	)
+	(lib_symbols)
+	(hierarchical_label "White Photodiode Wire"
+		(shape output)
+		(at 196.85 139.7 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7c1e28ec-d468-4d2a-9506-c80b866f33df")
+	)
+	(hierarchical_label "Red LED Wire"
+		(shape input)
+		(at 166.37 139.7 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8b6b7431-7b3d-4b35-a690-4856fe44b4d5")
+	)
+	(hierarchical_label "Green Photodiode Wire"
+		(shape output)
+		(at 196.85 143.51 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9af77fe2-8683-425f-9dc2-1065e928b481")
+	)
+	(hierarchical_label "Black LED Wire"
+		(shape input)
+		(at 166.37 143.51 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "dafd0460-f0e7-4e74-a801-9c42cff5a3fb")
+	)
+)
